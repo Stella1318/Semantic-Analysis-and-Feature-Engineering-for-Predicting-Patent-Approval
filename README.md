@@ -1,4 +1,4 @@
-# Semantic-Analysis-and-Feature-Engineering-for-Predicting-Patent-Approval-
+# Semantic-Analysis-and-Feature-Engineering-for-Predicting-Patent-Approval
 
 This repository contains my final project for my undergraduate machine learning class, which was recognized as the top submission. In this project, I aimed to predict patent approval using the patent application abstract. I also developed a similarity score to capture the uniqueness of each patent application. For a detailed discussion of my model specifications, please continue reading below. It's important to note that this project is a work in progress. I plan to update it regularly as I gather new ideas to further enhance my model.
 
