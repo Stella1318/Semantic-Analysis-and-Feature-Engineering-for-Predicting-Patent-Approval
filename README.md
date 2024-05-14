@@ -61,8 +61,3 @@ To address our secondary research question regarding patent approval based on ov
 - **Reflection**: Reflection on the importance of predictive modeling in the context of patent approval and its applications in various domains.
 - **Future Work**: Plans for future updates and enhancements to the model.
 
-This notebook provides a comprehensive approach to predicting patent approval using machine learning techniques, combining theoretical explanations with practical implementations. It serves as a valuable resource for understanding how to handle and model classification tasks effectively, particularly in the context of patent data.
-
----
-
-By including this detailed description in your README file, you offer a thorough overview of the notebook's content and purpose, making it easier for others to understand and appreciate the work you have done.
