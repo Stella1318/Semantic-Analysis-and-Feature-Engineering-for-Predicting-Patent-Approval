@@ -1,32 +1,15 @@
 # Semantic Analysis and Feature Engineering for Predicting Patent Approval
 
-## Overview
-
-This repository contains my final project for my undergraduate machine learning class, which was recognized as the top submission. In this project, I aimed to predict patent approval using the patent application abstract. I also developed a similarity score to capture the uniqueness of each patent application. For a detailed discussion of my model specifications, please continue reading below. It's important to note that this project is a work in progress. I plan to update it regularly as I gather new ideas to further enhance my model.
-
-## Table of Contents
-
-- [Introduction and Context](#introduction-and-context)
-- [Features](#features)
-- [Data and Methodology](#data-and-methodology)
-- [Model Selection and Training](#model-selection-and-training)
-- [Model Evaluation](#model-evaluation)
-- [Advanced Techniques](#advanced-techniques)
-- [Results and Insights](#results-and-insights)
-- [Conclusion](#conclusion)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-- [Credits](#credits)
+## Abstract
+The patent approval process is a cornerstone of intellectual property protection, incentivizing innovation and safeguarding inventors' rights. However, this process is often protracted and resource-intensive, presenting significant challenges for stakeholders such as inventors, investors, and policymakers. With an average approval wait time exceeding two years and substantial associated costs, there is a growing need for predictive tools to streamline patent evaluation. This paper investigates whether machine learning models can predict patent approval status using the textual content of patent abstracts and related application descriptions. By leveraging techniques such as TF-IDF vectorization and topic modeling through Latent Dirichlet Allocation (LDA), we extract relevant features for classification. Additionally, we engineer a similarity score to quantify overlaps with previously granted patents. Our results, obtained through a comparative analysis of multiple classification models, indicate that while text-based similarity offers predictive insights, the combination of abstract content and related text data yields the most accurate predictions. These findings highlight the potential for computational tools to enhance decision-making in the patent application 
 
 ## Introduction and Context
 
-Patent offices worldwide employ the concept of patentability, which encompasses six key criteria: Patentable Subject, Utility, Novelty, Quality, Non-Obviousness, and Enablement, guiding examiners in their patent grant decisions. It's intuitive to presume that inventors and patent lawyers endeavor to incorporate these criteria into patent applications and subsequent abstracts, suggesting the potential predictive power of abstracts in determining patent approval. This prompts our primary research question: Can machine learning models effectively predict patent approval based on patent abstracts?
+Innovation drives economic growth, particularly in technology-intensive industries where advancements rely heavily on research and development (R&D). Patents play a pivotal role in this ecosystem by granting inventors exclusive rights to their creations, thereby encouraging investment in novel ideas. However, the patenting process is fraught with challenges. Obtaining approval for a patent can take over two years, with significant costs incurred during the application process. In 2020 alone, the U.S. Patent and Trademark Office (USPTO) processed approximately 646,000 applications, granting only 388,900 patents—a 50% approval rate when factoring in wait times. These dynamics underscore the critical need for efficient evaluation mechanisms to support stakeholders in navigating the patenting landscape.
 
-Additionally, a significant determinant of patent approval is the overlap with previously granted patents. Thus, our secondary research question emerges: Can patent approval be predicted based on an application's similarity to previously published patents?
+Predicting patent approval status can aid in strategic decision-making for resource allocation, investment planning, and intellectual property management. Given that patent offices assess applications based on criteria such as novelty, utility, and non-obviousness, we hypothesize that the content of patent abstracts is predictive of approval outcomes. Moreover, since the overlap with previously granted patents influences decisions, we explore whether the similarity between new and existing applications can enhance predictive accuracy.
 
-A review of existing literature on patent approval is instrumental in situating this project within the broader academic and industry discourse. Prior studies have explored diverse methodologies, from traditional statistical models to advanced machine learning approaches. For instance, Carley et al. (2013) utilized statistical models to analyze patent approval rates, while Hido et al. (2012) employed textual mining techniques and logistic regression to predict patent approval. In a similar vein, Lin et al. (2018) evaluated patent quality using deep learning models.
-
-Our project diverges from previous approaches in two key aspects. Firstly, we simplify the problem from regression to classification, employing a binary target—Approved or Not Approved—enhancing interpretability and eliminating the need for threshold scores. Secondly, we adopt a more straightforward yet sophisticated approach to determine patent overlap and similarity, aiming to reduce computational complexity.
+Existing research in this domain has employed various methodologies, from statistical models to advanced machine learning techniques. While some studies have focused on patentability scores, others have integrated textual and non-textual features for predictive analysis. Our approach differs in two significant ways. First, we simplify the prediction task to a binary classification problem—Approved or Not Approved—enhancing interpretability. Second, we introduce a feature engineering technique to quantify textual similarity, reducing dimensionality while retaining meaningful information. This paper aims to contribute to the field by proposing a computational framework for patent approval prediction, leveraging machine learning to address this complex challenge.
 
 ## Features
 
@@ -35,71 +18,98 @@ Our project diverges from previous approaches in two key aspects. Firstly, we si
 - **Model Training**: Logistic regression with GridSearchCV for hyperparameter tuning.
 - **Evaluation**: Accuracy, classification report, and model performance visualization.
 
-## Data and Methodology
+Here's the rewritten continuation:
 
-### Data
-We sourced our dataset from Patentview, selecting a sample size of 5000 observations and 42 columns, including text variables, due to time and computational constraints. Upon further analysis, we identified the intrinsic quality of the product/process as the sole relevant predictor.
+---
 
-Our primary variables of interest are `application_abstract` and `rel_app_text`. The former denotes the abstract of the patent application, while the latter refers to a related patent application description. Although not explicitly stated, we inferred that `rel_app_text` pertains to previously published patents with significant overlap with the corresponding patent application.
+**2. Data and Methodology**
 
-### Text Vectorization
-Our methodology commences with the construction of a vector representation for our text variables (`application_abstract` and `rel_app_text`) post pre-processing. This transformation is imperative for utilizing text variables as predictors in machine learning models, which typically demand numerical input. We opted for TF-IDF vectorization due to its suitability in capturing semantic information relevant to our problem domain.
+**2.1 Data**
 
-### Feature Engineering: Similarity Score
-To address our secondary research question regarding patent approval based on overlap and similarity, we engineered a similarity score variable. Initially, we utilized Latent Dirichlet Allocation (LDA) to generate topic distributions for both `application_abstract` and `rel_app_text`, revealing underlying themes in our document corpus. Subsequently, we calculated the cosine similarity between the topic distributions of each pair of documents, signifying their thematic resemblance. Notably, ensuring uniformity in LDA model hyperparameters between `application_abstract` and `rel_app_text` was paramount, requiring meticulous tuning to attain congruent topic distributions. This step, albeit time-consuming, proved essential in accurately assessing document similarity.
+The dataset for this study was sourced from PatentsView, consisting of 5,000 observations and 42 variables, including textual features. Due to time and computational constraints, this sample size was deemed sufficient for our analysis. The primary variables of interest are `application_abstract`, which contains the patent abstract, and `rel_app_text`, which describes a related patent application. While the exact definition of `rel_app_text` is not explicitly stated, we assume it represents previously granted patents with significant overlap to the current application. This assumption aligns with the dataset's structure and relevance to our research objectives.
 
-## Model Selection and Training
+Given the theoretical focus on patent quality, we prioritize intrinsic characteristics of the patent rather than external factors. This approach ensures that the analysis remains rooted in the substantive content of the applications, which is directly linked to approval likelihood.
 
-### Introduction to Various Models
-Implementation of various machine learning algorithms suitable for the classification task, such as Logistic Regression, Decision Trees, Random Forest, Gradient Boosting, and Support Vector Machines (SVM).
+---
 
-### Training and Hyperparameter Tuning
-Training each model on the prepared dataset and tuning hyperparameters to optimize performance. Use of cross-validation to evaluate the robustness of the models and avoid overfitting.
+**2.2 Text Variable Vectorization**
 
-## Model Evaluation
+Textual data must be transformed into numerical representations to serve as inputs for machine learning models. For this purpose, we applied Term Frequency-Inverse Document Frequency (TF-IDF) vectorization, a technique that balances word frequency and specificity. TF-IDF was chosen over alternatives like Bag-of-Words and word embeddings because it effectively captures the relevance of terms within the context of technical patent language.
 
-### Evaluation Metrics
-Evaluation of the trained models using metrics such as accuracy, precision, recall, F1-score, and ROC-AUC.
+Unlike general text data, patent abstracts often feature consistent terminology to describe identical or similar concepts. For instance, compounds with the same molecular structure may have different isomer names, as seen with Modafinil and Armodafinil. TF-IDF assigns higher weights to terms that are uniquely representative of a specific document while accounting for their prevalence across the corpus. This approach enhances the model's ability to discern nuanced differences in patent language, which are critical for approval decisions.
 
-### Model Comparison
-Comparison of model performance on the training and testing datasets to identify the best-performing model.
+---
 
-### Visualization
-Visualization of the ROC curves, precision-recall curves, and confusion matrices to assess the models' performance in detail.
+**2.3 Feature Engineering: Similarity Score**
 
-## Advanced Techniques
+To assess the impact of textual overlap between applications, we engineered a similarity score based on Latent Dirichlet Allocation (LDA) topic modeling. The process involved the following steps:
 
-### Ensemble Methods
-Application of ensemble methods, such as Bagging and Boosting, to improve model accuracy and robustness.
+1. **Topic Extraction**: LDA was used to uncover thematic structures in the `application_abstract` and `rel_app_text` variables. Each document was represented as a distribution of topics, with the number of topics determined through coherence score optimization.
+   
+2. **Topic Distribution Representation**: For each document, a vector of topic proportions was generated, reflecting the relative prevalence of each theme.
 
-### Model Interpretability
-Discussion on model interpretability, including feature importance and SHAP (SHapley Additive exPlanations) values.
+3. **Cosine Similarity Calculation**: The cosine similarity between the topic distributions of `application_abstract` and `rel_app_text` was computed for each observation. Higher similarity values indicate greater thematic overlap, which may influence approval outcomes.
 
-### Computational Efficiency
-Examination of the trade-offs between model complexity and performance.
+This process required extensive tuning of LDA hyperparameters to ensure consistent topic structures across both textual variables. Initially, discrepancies in topic counts necessitated exclusion restrictions, but subsequent resampling and tuning resolved these issues.
 
-## Results and Insights
+---
 
-### Summary of Findings
-Summary of the findings from the patent approval prediction analysis.
+**2.4 Classification Models**
 
-### Insights
-Insights derived from the models, including key patterns and relationships identified in the data.
+To predict patent approval status, we tested four models using three classifiers: Penalized Logistic Regression, K-Nearest Neighbors (KNN), and Random Forest. The models incorporated varying combinations of features, as summarized in Table 1:
 
-### Discussion
-Discussion on the limitations of the analysis and potential areas for future work.
+| Model   | Feature 1            | Feature 2              | Feature 3          | Target               |
+|---------|----------------------|------------------------|--------------------|----------------------|
+| Model 1 | `application_abstract` | —                      | —                  | `approval_status`    |
+| Model 2 | `rel_app_text`        | —                      | —                  | `approval_status`    |
+| Model 3 | `application_abstract` | `similarity_score`     | —                  | `approval_status`    |
+| Model 4 | `application_abstract` | `rel_app_text`         | `similarity_score` | `approval_status`    |
 
-## Conclusion
+Class imbalance in the target variable (`approval_status`, with a 3300:1700 ratio) was addressed using undersampling during training and class weights in the classifiers. These methods mitigated overfitting and improved model performance on minority class predictions.
 
-### Recap of Objectives
-Recap of the objectives and main findings from the notebook.
+Grid search was employed to optimize hyperparameters for each classifier, ensuring robust model tuning. This systematic approach enhanced the reliability of our results.
 
-### Reflection
-Reflection on the importance of predictive modeling in the context of patent approval and its applications in various domains.
+---
 
-### Future Work
-Plans for future updates and enhancements to the model.
+**3. Results**
 
+**3.1 Optimal Number of Topics Through LDA**
+
+The optimal number of topics for both `application_abstract` and `rel_app_text` was determined to be 20, based on coherence score analysis. Figures 1.1 and 1.2 illustrate the coherence score trends, highlighting the stability of topics in abstracts compared to the variability in related application texts. This variability likely reflects the diverse nature of related patents and their terminology.
+
+---
+
+**3.2 Top Words for Each Topic**
+
+Figures 3 and 5 display the top 10 words for each topic in `application_abstract` and `rel_app_text`, respectively. The consistency of terms in abstracts across training and test datasets underscores the robustness of LDA in capturing thematic structures. Conversely, the variability in `rel_app_text` suggests differences in the linguistic and conceptual content of related patents.
+
+---
+
+**3.3 Model Performance**
+
+The accuracy and classification reports for the four models are summarized below:
+
+- **Logistic Regression**: Model 4 achieved the highest accuracy (55.95%).
+- **KNN Classifier**: Model 3 outperformed others with an accuracy of 58.1%.
+- **Random Forest Classifier**: Model 4 yielded the best performance at 58.8%.
+
+Despite these results, class imbalances persisted, as evidenced by disparities in precision and F1 scores across categories. The Random Forest Classifier's superior accuracy suggests its effectiveness in capturing complex patterns within the data.
+
+---
+
+**3.4 Discussion**
+
+The inclusion of similarity scores marginally improved predictive performance, emphasizing the nuanced role of textual overlap in patent approval. Model 4 consistently outperformed others, highlighting the benefits of combining abstract content with related text data and similarity measures. However, the limitations of LDA in capturing technical distinctions, such as novel chemical compositions, may have constrained the model's predictive capabilities.
+
+---
+
+**4. Conclusion**
+
+Our findings demonstrate the feasibility of predicting patent approval status using machine learning models, with a maximum accuracy of 58.8% achieved through a Random Forest Classifier. While text-based similarity provides valuable insights, its predictive power is limited by the granularity of topic modeling techniques like LDA. Future research could explore advanced algorithms, such as large language models, to capture deeper semantic and technical nuances in patent applications.
+
+---
+
+Let me know if you'd like additional refinements or edits to specific sections!
 ## License
 
 MIT License
